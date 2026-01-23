@@ -1,5 +1,6 @@
 import DatabaseService from './database.service';
 import { Expense, CreateExpenseInput, UpdateExpenseInput } from '../types/domain';
+import ExpenseValidationService from './expense-validation.service';
 import { Logger } from '../utils/logger';
 
 /**
@@ -124,20 +125,23 @@ export class ExpenseService extends DatabaseService {
 
   /**
    * Create a new expense (tenant-scoped)
-   * Calculates VAT based on vat_percent
+   * Validates input and calculates VAT automatically
    */
   async create(businessId: string, input: CreateExpenseInput): Promise<Expense> {
     try {
       Logger.info('Creating expense', { businessId, category: input.category });
 
-      // Validate required fields
-      if (!input.date || !input.category || input.amount === undefined) {
-        throw new Error('Expense date, category, and amount are required');
-      }
+      // Validate input using validation service
+      ExpenseValidationService.validateCreateInput(input);
 
-      // Calculate VAT
-      const vatAmount = input.amount * (input.vat_percent / 100);
-      const totalAmount = input.amount + vatAmount;
+      // Calculate VAT amounts using validation service
+      const vatAmount = ExpenseValidationService.calculateVatAmount(input.amount, input.vat_percent);
+      const totalAmount = ExpenseValidationService.calculateTotalAmount(input.amount, input.vat_percent);
+
+      // Determine VAT recoverability if not explicitly set
+      const vatRecoverable = input.vat_recoverable !== undefined 
+        ? input.vat_recoverable 
+        : ExpenseValidationService.isVatRecoverable(input.category);
 
       const { data, error } = await this.supabase
         .from('expenses')
@@ -150,7 +154,7 @@ export class ExpenseService extends DatabaseService {
             amount: input.amount,
             vat_percent: input.vat_percent,
             vat_amount: vatAmount,
-            vat_recoverable: input.vat_recoverable || false,
+            vat_recoverable: vatRecoverable,
             receipt_url: input.receipt_url || null,
             total_amount: totalAmount,
             created_at: new Date().toISOString(),
@@ -177,7 +181,7 @@ export class ExpenseService extends DatabaseService {
 
   /**
    * Update expense details (tenant-scoped)
-   * Recalculates VAT if amount or vat_percent changes
+   * Validates input and enforces same-day edit rule
    */
   async updateExpense(
     businessId: string,
@@ -193,18 +197,20 @@ export class ExpenseService extends DatabaseService {
         throw new Error('Expense not found');
       }
 
+      // Validate input and check immutability rules
+      ExpenseValidationService.validateUpdateInput(input, existing.date);
+
       const updateData: Record<string, unknown> = {
         updated_at: new Date().toISOString(),
       };
 
-      // Handle amount/vat_percent changes
+      // Handle amount/vat_percent changes with proper validation
       const newAmount = input.amount !== undefined ? input.amount : existing.amount;
-      const newVatPercent =
-        input.vat_percent !== undefined ? input.vat_percent : existing.vat_percent;
+      const newVatPercent = input.vat_percent !== undefined ? input.vat_percent : existing.vat_percent;
 
       if (input.amount !== undefined || input.vat_percent !== undefined) {
-        const vatAmount = newAmount * (newVatPercent / 100);
-        const totalAmount = newAmount + vatAmount;
+        const vatAmount = ExpenseValidationService.calculateVatAmount(newAmount, newVatPercent);
+        const totalAmount = ExpenseValidationService.calculateTotalAmount(newAmount, newVatPercent);
 
         updateData.amount = newAmount;
         updateData.vat_percent = newVatPercent;
@@ -212,9 +218,16 @@ export class ExpenseService extends DatabaseService {
         updateData.total_amount = totalAmount;
       }
 
+      // Handle category change - update VAT recoverability if not explicitly set
+      if (input.category !== undefined) {
+        updateData.category = input.category;
+        if (input.vat_recoverable === undefined) {
+          updateData.vat_recoverable = ExpenseValidationService.isVatRecoverable(input.category);
+        }
+      }
+
       // Only include other provided fields
       if (input.date !== undefined) updateData.date = input.date;
-      if (input.category !== undefined) updateData.category = input.category;
       if (input.description !== undefined) updateData.description = input.description;
       if (input.vat_recoverable !== undefined) updateData.vat_recoverable = input.vat_recoverable;
       if (input.receipt_url !== undefined) updateData.receipt_url = input.receipt_url;

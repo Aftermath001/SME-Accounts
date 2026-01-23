@@ -1,7 +1,6 @@
 import DatabaseService from './database.service';
 import { InvoiceItem, CreateInvoiceItemInput } from '../types/domain';
 import { Logger } from '../utils/logger';
-import InvoiceCalculationService from './invoice-calculation.service';
 
 /**
  * Invoice Item Service
@@ -13,12 +12,6 @@ import InvoiceCalculationService from './invoice-calculation.service';
  */
 
 export class InvoiceItemService extends DatabaseService {
-  private calculationService: InvoiceCalculationService;
-
-  constructor() {
-    super();
-    this.calculationService = new InvoiceCalculationService();
-  }
   /**
    * Get invoice item by ID
    */
@@ -216,7 +209,6 @@ export class InvoiceItemService extends DatabaseService {
   /**
    * Update an invoice item
    * Only allowed on draft invoices
-   * Automatically recalculates invoice totals
    */
   async updateItem(itemId: string, input: CreateInvoiceItemInput): Promise<InvoiceItem> {
     try {
@@ -258,10 +250,7 @@ export class InvoiceItemService extends DatabaseService {
       }
 
       const updatedItem = data[0] as InvoiceItem;
-
-      // Recalculate invoice totals
-      await this.calculationService.recalculateAndStore(existing.invoice_id);
-      Logger.debug('Invoice totals recalculated after item update', { invoiceId: existing.invoice_id });
+      Logger.debug('Invoice item updated', { itemId, invoiceId: existing.invoice_id });
 
       return updatedItem;
     } catch (error) {
@@ -274,7 +263,6 @@ export class InvoiceItemService extends DatabaseService {
   /**
    * Delete an invoice item
    * Only allowed on draft invoices
-   * Automatically recalculates invoice totals
    */
   async deleteItem(itemId: string): Promise<boolean> {
     try {
@@ -286,8 +274,6 @@ export class InvoiceItemService extends DatabaseService {
         throw new Error('Invoice item not found');
       }
 
-      const invoiceId = existing.invoice_id;
-
       const { error } = await this.supabase.from('invoice_items').delete().eq('id', itemId);
 
       if (error) {
@@ -295,10 +281,7 @@ export class InvoiceItemService extends DatabaseService {
         throw new Error(`Failed to delete invoice item: ${(error as any).message}`);
       }
 
-      // Recalculate invoice totals
-      await this.calculationService.recalculateAndStore(invoiceId);
-      Logger.info('Invoice item deleted and totals recalculated', { itemId, invoiceId });
-
+      Logger.info('Invoice item deleted', { itemId, invoiceId: existing.invoice_id });
       return true;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);

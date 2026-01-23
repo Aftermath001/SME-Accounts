@@ -365,6 +365,9 @@ export class InvoiceController {
 
       const item = await this.itemService.create(invoiceId, input);
 
+      // Recalculate invoice totals after adding item
+      await this.calculationService.recalculateAndStore(invoiceId);
+
       sendSuccess(res, item, 201);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
@@ -407,6 +410,9 @@ export class InvoiceController {
       Logger.info('Updating invoice item', { invoiceId, itemId, businessId });
 
       const item = await this.itemService.updateItem(itemId, input);
+
+      // Recalculate invoice totals after updating item
+      await this.calculationService.recalculateAndStore(invoiceId);
 
       sendSuccess(res, item);
     } catch (error) {
@@ -452,6 +458,9 @@ export class InvoiceController {
         sendError(res, 'Failed to delete invoice item', 500);
         return;
       }
+
+      // Recalculate invoice totals after deleting item
+      await this.calculationService.recalculateAndStore(invoiceId);
 
       sendSuccess(res, { id: itemId });
     } catch (error) {

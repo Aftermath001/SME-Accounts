@@ -6,6 +6,7 @@ import { errorHandler, notFoundHandler } from './utils/error-handler';
 import healthRouter from './routes/health';
 import authRouter from './routes/auth.routes';
 import invoiceRouter from './routes/invoice.routes';
+import expenseRouter from './routes/expense.routes';
 import { validateSupabaseConnection } from './config/supabase';
 
 const app = express();
@@ -51,6 +52,10 @@ app.use('/auth', authRouter);
 // Invoice routes (protected, requires auth + tenant context)
 // POST /invoices, GET /invoices, GET /invoices/:id, etc.
 app.use('/invoices', invoiceRouter);
+
+// Expense routes (protected, requires auth + tenant context)
+// POST /expenses, GET /expenses, GET /expenses/:id, etc.
+app.use('/expenses', expenseRouter);
 
 // ============================================================================
 // ERROR HANDLING

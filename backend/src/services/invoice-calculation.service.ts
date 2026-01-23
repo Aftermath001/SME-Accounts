@@ -1,5 +1,4 @@
 import DatabaseService from './database.service';
-import InvoiceItemService from './invoice-item.service';
 import { Invoice } from '../types/domain';
 import { Logger } from '../utils/logger';
 
@@ -21,12 +20,6 @@ export interface InvoiceTotals {
 }
 
 export class InvoiceCalculationService extends DatabaseService {
-  private itemService: InvoiceItemService;
-
-  constructor() {
-    super();
-    this.itemService = new InvoiceItemService();
-  }
 
   /**
    * Calculate invoice totals from items
@@ -37,8 +30,17 @@ export class InvoiceCalculationService extends DatabaseService {
     try {
       Logger.debug('Calculating invoice totals', { invoiceId });
 
-      // Fetch all items for invoice
-      const items = await this.itemService.listByInvoice(invoiceId);
+      // Fetch all items for invoice directly
+      const { data: items, error } = await this.supabase
+        .from('invoice_items')
+        .select('*')
+        .eq('invoice_id', invoiceId)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        Logger.error('Failed to fetch invoice items', error as Error);
+        throw new Error(`Failed to fetch invoice items: ${(error as any).message}`);
+      }
 
       if (!items || items.length === 0) {
         throw new Error('Invoice must have at least one item');
@@ -180,9 +182,19 @@ export class InvoiceCalculationService extends DatabaseService {
     try {
       Logger.debug('Getting VAT breakdown', { invoiceId });
 
-      const items = await this.itemService.listByInvoice(invoiceId);
+      // Fetch items directly
+      const { data: items, error } = await this.supabase
+        .from('invoice_items')
+        .select('*')
+        .eq('invoice_id', invoiceId)
+        .order('created_at', { ascending: true });
 
-      return items.map((item) => ({
+      if (error) {
+        Logger.error('Failed to fetch invoice items', error as Error);
+        throw new Error(`Failed to fetch invoice items: ${(error as any).message}`);
+      }
+
+      return (items || []).map((item) => ({
         description: item.description,
         lineTotal: item.line_total,
         vatPercent: item.vat_percent,
