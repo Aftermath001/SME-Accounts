@@ -4,6 +4,7 @@ import config from './config';
 import { Logger } from './utils/logger';
 import { errorHandler, notFoundHandler } from './utils/error-handler';
 import healthRouter from './routes/health';
+import authRouter from './routes/auth.routes';
 import { validateSupabaseConnection } from './config/supabase';
 
 const app = express();
@@ -41,6 +42,10 @@ app.use((req: Request, _res: Response, next: NextFunction): void => {
 
 // Health check (public, no auth required)
 app.use(healthRouter);
+
+// Auth routes (public, no auth required)
+// POST /auth/signup, POST /auth/login
+app.use('/auth', authRouter);
 
 // ============================================================================
 // ERROR HANDLING

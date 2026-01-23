@@ -1,11 +1,39 @@
 /**
- * Type definitions for authenticated request context
+ * Type definitions for authentication and tenancy
+ */
+
+/**
+ * User object from Supabase JWT
+ */
+export interface User {
+  id: string;
+  email: string;
+  user_metadata?: Record<string, unknown>;
+}
+
+/**
+ * Authenticated user context (extracted from JWT)
+ */
+export interface UserContext {
+  userId: string;
+  email: string;
+}
+
+/**
+ * Business/Tenant context (resolved after auth)
+ */
+export interface TenantContext {
+  businessId: string;
+  businessName: string;
+  ownerId: string;
+}
+
+/**
+ * Full auth context (user + tenant)
  */
 export interface AuthContext {
-  userId: string;
-  businessId: string;
-  email: string;
-  role: 'owner' | 'accountant' | 'viewer';
+  user: UserContext;
+  tenant: TenantContext;
 }
 
 /**
@@ -15,6 +43,8 @@ export interface AuthContext {
 declare global {
   namespace Express {
     interface Request {
+      user?: UserContext;
+      tenant?: TenantContext;
       auth?: AuthContext;
     }
   }

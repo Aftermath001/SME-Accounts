@@ -11,11 +11,20 @@ export interface ApiResponse<T = unknown> {
   timestamp: string;
 }
 
-export function successResponse<T>(data: T, timestamp?: string): ApiResponse<T> {
+export function successResponse<T>(dataOrMessage: T | string, data?: T | string): ApiResponse<T> {
+  // Support two patterns:
+  // 1. successResponse(data) - data first
+  // 2. successResponse(message, data) - message and data
+  let responseData: T | unknown = dataOrMessage;
+  
+  if (typeof dataOrMessage === 'string' && data !== undefined) {
+    responseData = data;
+  }
+
   return {
     success: true,
-    data,
-    timestamp: timestamp || new Date().toISOString(),
+    data: responseData as T,
+    timestamp: new Date().toISOString(),
   };
 }
 
