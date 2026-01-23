@@ -5,6 +5,7 @@ import { Logger } from './utils/logger';
 import { errorHandler, notFoundHandler } from './utils/error-handler';
 import healthRouter from './routes/health';
 import authRouter from './routes/auth.routes';
+import invoiceRouter from './routes/invoice.routes';
 import { validateSupabaseConnection } from './config/supabase';
 
 const app = express();
@@ -46,6 +47,10 @@ app.use(healthRouter);
 // Auth routes (public, no auth required)
 // POST /auth/signup, POST /auth/login
 app.use('/auth', authRouter);
+
+// Invoice routes (protected, requires auth + tenant context)
+// POST /invoices, GET /invoices, GET /invoices/:id, etc.
+app.use('/invoices', invoiceRouter);
 
 // ============================================================================
 // ERROR HANDLING

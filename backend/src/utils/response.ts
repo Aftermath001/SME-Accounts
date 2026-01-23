@@ -42,3 +42,43 @@ export function errorResponse(
     timestamp: timestamp || new Date().toISOString(),
   };
 }
+
+/**
+ * Send success response to client
+ * @param res Express response object
+ * @param data Response data
+ * @param statusCode HTTP status code (default: 200)
+ */
+export function sendSuccess<T>(
+  res: any,
+  data: T,
+  statusCode: number = 200
+): void {
+  const response: ApiResponse<T> = {
+    success: true,
+    data,
+    timestamp: new Date().toISOString(),
+  };
+
+  res.status(statusCode).json(response);
+}
+
+/**
+ * Send error response to client
+ * @param res Express response object
+ * @param message Error message
+ * @param statusCode HTTP status code (default: 500)
+ */
+export function sendError(res: any, message: string, statusCode: number = 500): void {
+  const response: ApiResponse = {
+    success: false,
+    error: {
+      code: String(statusCode),
+      message,
+    },
+    timestamp: new Date().toISOString(),
+  };
+
+  res.status(statusCode).json(response);
+}
+
