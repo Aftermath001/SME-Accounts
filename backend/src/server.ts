@@ -7,6 +7,7 @@ import healthRouter from './routes/health';
 import authRouter from './routes/auth.routes';
 import invoiceRouter from './routes/invoice.routes';
 import expenseRouter from './routes/expense.routes';
+import reportRouter from './routes/report.routes';
 import { validateSupabaseConnection } from './config/supabase';
 
 const app = express();
@@ -56,6 +57,10 @@ app.use('/invoices', invoiceRouter);
 // Expense routes (protected, requires auth + tenant context)
 // POST /expenses, GET /expenses, GET /expenses/:id, etc.
 app.use('/expenses', expenseRouter);
+
+// Report routes (protected, requires auth + tenant context)
+// GET /reports/profit, GET /reports/vat-summary, etc.
+app.use('/reports', reportRouter);
 
 // ============================================================================
 // ERROR HANDLING
