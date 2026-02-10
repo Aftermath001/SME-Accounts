@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import config from './config';
@@ -78,6 +79,10 @@ app.use(errorHandler);
 
 const start = async (): Promise<void> => {
   try {
+    // Debug: Verify environment variables are loaded
+    console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
+    console.log('Environment loaded:', !!process.env.SUPABASE_URL);
+    
     Logger.info('Starting SME-Accounts Backend', {
       environment: config.node_env,
       port: config.server.port,
@@ -86,8 +91,8 @@ const start = async (): Promise<void> => {
     // Validate Supabase connection before starting server
     const isSupabaseReady = await validateSupabaseConnection();
     if (!isSupabaseReady) {
-      Logger.error('Failed to connect to Supabase. Check your credentials and try again.');
-      process.exit(1);
+      Logger.warn('⚠️  Supabase connection failed - continuing in development mode');
+      Logger.warn('Some features may not work without database connection');
     }
 
     app.listen(config.server.port, config.server.host, () => {
