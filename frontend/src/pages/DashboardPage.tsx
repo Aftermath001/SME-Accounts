@@ -1,86 +1,99 @@
-import { useAuth } from '../auth/useAuth';
-import { useNavigate } from 'react-router-dom';
+import AppLayout from '../layouts/AppLayout';
+import Card from '../components/Card';
+import { Link } from 'react-router-dom';
 
 export default function DashboardPage() {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/login');
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <h1 className="text-xl font-bold">SME Accounts</h1>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">{user?.email}</span>
-              <button
-                onClick={handleSignOut}
-                className="px-4 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700"
-              >
-                Sign Out
-              </button>
+    <AppLayout>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
+        <p className="text-slate-600 mt-1">Overview of your business finances</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-600">Total Invoices</p>
+              <p className="text-3xl font-bold text-slate-900 mt-2">0</p>
             </div>
+            <div className="text-4xl">📄</div>
           </div>
-        </div>
-      </nav>
+        </Card>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
-          <p className="text-gray-600">Welcome to your accounting dashboard</p>
-        </div>
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-600">Total Expenses</p>
+              <p className="text-3xl font-bold text-slate-900 mt-2">KES 0</p>
+            </div>
+            <div className="text-4xl">💰</div>
+          </div>
+        </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-sm font-medium text-gray-500">Total Invoices</h3>
-            <p className="text-3xl font-bold text-gray-900 mt-2">0</p>
+        <Card className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-600">VAT Due</p>
+              <p className="text-3xl font-bold text-slate-900 mt-2">KES 0</p>
+            </div>
+            <div className="text-4xl">📊</div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-sm font-medium text-gray-500">Total Expenses</h3>
-            <p className="text-3xl font-bold text-gray-900 mt-2">KES 0</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-sm font-medium text-gray-500">VAT Due</h3>
-            <p className="text-3xl font-bold text-gray-900 mt-2">KES 0</p>
-          </div>
-        </div>
+        </Card>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <a
-            href="/invoices"
-            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition"
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Invoices</h3>
-            <p className="text-gray-600">Create and manage invoices</p>
-          </a>
-          <a
-            href="/expenses"
-            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition"
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Expenses</h3>
-            <p className="text-gray-600">Track business expenses</p>
-          </a>
-          <a
-            href="/customers"
-            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition"
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Customers</h3>
-            <p className="text-gray-600">Manage customer information</p>
-          </a>
-          <a
-            href="/reports"
-            className="bg-white p-6 rounded-lg shadow hover:shadow-md transition"
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Reports</h3>
-            <p className="text-gray-600">View financial reports</p>
-          </a>
+      <div>
+        <h2 className="text-xl font-semibold text-slate-900 mb-4">Quick Actions</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Link to="/invoices">
+            <Card className="p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="flex items-start gap-4">
+                <div className="text-3xl">📄</div>
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900">Invoices</h3>
+                  <p className="text-slate-600 text-sm mt-1">Create and manage customer invoices</p>
+                </div>
+              </div>
+            </Card>
+          </Link>
+
+          <Link to="/expenses">
+            <Card className="p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="flex items-start gap-4">
+                <div className="text-3xl">💰</div>
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900">Expenses</h3>
+                  <p className="text-slate-600 text-sm mt-1">Track and categorize business expenses</p>
+                </div>
+              </div>
+            </Card>
+          </Link>
+
+          <Link to="/customers">
+            <Card className="p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="flex items-start gap-4">
+                <div className="text-3xl">👥</div>
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900">Customers</h3>
+                  <p className="text-slate-600 text-sm mt-1">Manage customer information and contacts</p>
+                </div>
+              </div>
+            </Card>
+          </Link>
+
+          <Link to="/reports">
+            <Card className="p-6 hover:shadow-md transition-shadow cursor-pointer">
+              <div className="flex items-start gap-4">
+                <div className="text-3xl">📈</div>
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900">Reports</h3>
+                  <p className="text-slate-600 text-sm mt-1">View financial reports and KRA compliance</p>
+                </div>
+              </div>
+            </Card>
+          </Link>
         </div>
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   );
 }

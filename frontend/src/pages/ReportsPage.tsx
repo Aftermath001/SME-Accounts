@@ -1,43 +1,60 @@
-import { useNavigate } from 'react-router-dom';
+import AppLayout from '../layouts/AppLayout';
+import Card from '../components/Card';
+import Button from '../components/Button';
 
 export default function ReportsPage() {
-  const navigate = useNavigate();
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <h1 className="text-xl font-bold cursor-pointer" onClick={() => navigate('/dashboard')}>
-              SME Accounts
-            </h1>
-          </div>
-        </div>
-      </nav>
+    <AppLayout>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-900">Reports</h1>
+        <p className="text-slate-600 mt-1">Financial reports and KRA compliance</p>
+      </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">Reports</h2>
-          <p className="text-gray-600">View your financial reports</p>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="text-4xl">📊</div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Profit & Loss</h3>
+              <p className="text-slate-600 text-sm mb-4">View your income and expenses over time</p>
+              <Button variant="secondary">View Report</Button>
+            </div>
+          </div>
+        </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Profit & Loss</h3>
-            <p className="text-gray-600 mb-4">View your income and expenses</p>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-              View Report
-            </button>
+        <Card className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="text-4xl">📈</div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">VAT Summary</h3>
+              <p className="text-slate-600 text-sm mb-4">KRA VAT compliance and filing report</p>
+              <Button variant="secondary">View Report</Button>
+            </div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">VAT Summary</h3>
-            <p className="text-gray-600 mb-4">KRA VAT compliance report</p>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-              View Report
-            </button>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="text-4xl">💼</div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Balance Sheet</h3>
+              <p className="text-slate-600 text-sm mb-4">Assets, liabilities, and equity overview</p>
+              <Button variant="secondary">View Report</Button>
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="text-4xl">📅</div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">Monthly Summary</h3>
+              <p className="text-slate-600 text-sm mb-4">Month-by-month financial performance</p>
+              <Button variant="secondary">View Report</Button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </AppLayout>
   );
 }

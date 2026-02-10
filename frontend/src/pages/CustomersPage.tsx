@@ -1,37 +1,27 @@
-import { useNavigate } from 'react-router-dom';
+import AppLayout from '../layouts/AppLayout';
+import Card from '../components/Card';
+import Button from '../components/Button';
+import EmptyState from '../components/EmptyState';
 
 export default function CustomersPage() {
-  const navigate = useNavigate();
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <h1 className="text-xl font-bold cursor-pointer" onClick={() => navigate('/dashboard')}>
-              SME Accounts
-            </h1>
-          </div>
+    <AppLayout>
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">Customers</h1>
+          <p className="text-slate-600 mt-1">Manage customer information and contacts</p>
         </div>
-      </nav>
+        <Button>+ Add Customer</Button>
+      </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Customers</h2>
-            <p className="text-gray-600">Manage your customer information</p>
-          </div>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Add Customer
-          </button>
-        </div>
-
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 text-center text-gray-500">
-            No customers yet. Add your first customer to get started.
-          </div>
-        </div>
-      </main>
-    </div>
+      <Card>
+        <EmptyState
+          icon="👥"
+          title="No customers yet"
+          description="Add your first customer to start creating invoices"
+          action={<Button>Add Your First Customer</Button>}
+        />
+      </Card>
+    </AppLayout>
   );
 }

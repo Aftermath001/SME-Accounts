@@ -1,37 +1,27 @@
-import { useNavigate } from 'react-router-dom';
+import AppLayout from '../layouts/AppLayout';
+import Card from '../components/Card';
+import Button from '../components/Button';
+import EmptyState from '../components/EmptyState';
 
 export default function ExpensesPage() {
-  const navigate = useNavigate();
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <h1 className="text-xl font-bold cursor-pointer" onClick={() => navigate('/dashboard')}>
-              SME Accounts
-            </h1>
-          </div>
+    <AppLayout>
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">Expenses</h1>
+          <p className="text-slate-600 mt-1">Track and categorize business expenses</p>
         </div>
-      </nav>
+        <Button>+ Add Expense</Button>
+      </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">Expenses</h2>
-            <p className="text-gray-600">Track your business expenses</p>
-          </div>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-            Add Expense
-          </button>
-        </div>
-
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 text-center text-gray-500">
-            No expenses recorded yet. Add your first expense to get started.
-          </div>
-        </div>
-      </main>
-    </div>
+      <Card>
+        <EmptyState
+          icon="💰"
+          title="No expenses recorded"
+          description="Start tracking your business expenses for better financial management"
+          action={<Button>Record Your First Expense</Button>}
+        />
+      </Card>
+    </AppLayout>
   );
 }
