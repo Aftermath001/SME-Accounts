@@ -25,10 +25,10 @@ function App() {
         <BrowserRouter>
           <Suspense
             fallback={
-              <div className="flex min-h-screen items-center justify-center bg-background-50">
+              <div className="flex min-h-screen items-center justify-center bg-slate-50">
                 <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-card border border-slate-100">
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
-                  <p className="text-xs font-medium text-neutral-600">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                  <p className="text-xs font-medium text-slate-600">
                     Loading SME Accounts&hellip;
                   </p>
                 </div>

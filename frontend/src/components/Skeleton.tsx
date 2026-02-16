@@ -3,26 +3,19 @@ interface SkeletonProps {
   variant?: 'text' | 'circular' | 'rectangular';
 }
 
-export default function Skeleton({
-  className = '',
-  variant = 'rectangular',
-}: SkeletonProps) {
+export default function Skeleton({ className = '', variant = 'rectangular' }: SkeletonProps) {
   const variants = {
-    text: 'h-4 rounded-md',
+    text: 'h-4 rounded',
     circular: 'rounded-full',
-    rectangular: 'rounded-xl',
+    rectangular: 'rounded-lg',
   };
 
-  return (
-    <div
-      className={`animate-pulse bg-slate-200 ${variants[variant]} ${className}`}
-    />
-  );
+  return <div className={`animate-pulse bg-slate-200 ${variants[variant]} ${className}`} />;
 }
 
 export function CardSkeleton() {
   return (
-    <div className="bg-surface rounded-2xl shadow-card border border-slate-100 p-6 space-y-4">
+    <div className="bg-white rounded-xl shadow-card p-6 space-y-4">
       <Skeleton className="h-6 w-1/3" />
       <Skeleton className="h-4 w-full" />
       <Skeleton className="h-4 w-2/3" />

@@ -1,15 +1,7 @@
-import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 import Toast from './Toast';
-
-
-type ToastType = 'success' | 'error' | 'warning' | 'info';
-
-interface ToastItem {
-  id: string;
-  message: string;
-  type: ToastType;
-}
+import type { ToastType, Toast as ToastInterface } from './Toast';
+import { createContext, useContext, useState } from 'react';
 
 interface ToastContextType {
   showToast: (message: string, type?: ToastType) => void;
@@ -18,22 +10,22 @@ interface ToastContextType {
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export function ToastProvider({ children }: { children: ReactNode }) {
-  const [toasts, setToasts] = useState<ToastItem[]>([]);
+  const [toasts, setToasts] = useState<ToastInterface[]>([]);
 
   const showToast = (message: string, type: ToastType = 'info') => {
-    const id = crypto.randomUUID();
+    const id = Math.random().toString(36).substr(2, 9);
     setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 4000);
+    setTimeout(() => removeToast(id), 4000);
   };
+
+  const removeToast = (id: string) => setToasts((prev) => prev.filter((t) => t.id !== id));
 
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <div className="fixed top-4 right-4 z-50 space-y-3">
+      <div className="fixed top-4 right-4 z-50 space-y-2">
         {toasts.map((toast) => (
-          <Toast key={toast.id} {...toast} onClose={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))} />
+          <Toast key={toast.id} toast={toast} onRemove={removeToast} />
         ))}
       </div>
     </ToastContext.Provider>

@@ -22,13 +22,17 @@ export default function Button({
   const isDisabled = disabled || loading;
 
   const baseStyles =
-    'inline-flex items-center justify-center rounded-xl font-medium transition-all duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background disabled:opacity-60 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center rounded-xl font-medium tracking-tight transition-all duration-150 ease-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-60 disabled:cursor-not-allowed';
 
   const variants: Record<ButtonVariant, string> = {
-    primary: 'bg-primary text-surface hover:bg-primary-dark shadow-md active:scale-[0.98]',
-    secondary: 'bg-text-primary text-surface hover:bg-text-primary/90 shadow-md active:scale-[0.98]',
-    outline: 'border border-text-secondary text-text-primary bg-surface hover:bg-background',
-    danger: 'bg-error text-surface hover:bg-error/90 active:scale-[0.98]',
+    primary:
+      'bg-primary text-white shadow-sm hover:bg-primary-dark active:scale-[0.98]',
+    secondary:
+      'bg-slate-900 text-white hover:bg-slate-800 shadow-sm active:scale-[0.98]',
+    outline:
+      'border border-slate-300 text-neutral-700 bg-white hover:bg-slate-50 hover:border-slate-400',
+    danger:
+      'bg-error text-white shadow-sm hover:bg-red-600 active:scale-[0.98]',
   };
 
   const sizes: Record<ButtonSize, string> = {
@@ -45,7 +49,7 @@ export default function Button({
       {...props}
     >
       {loading && (
-        <span className="mr-2 inline-flex h-4 w-4 items-center justify-center">
+        <span className="mr-2 inline-flex h-4 w-4 items-center justify-center" aria-hidden="true">
           <span className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
         </span>
       )}

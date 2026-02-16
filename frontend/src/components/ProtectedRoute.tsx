@@ -1,9 +1,8 @@
 import { Navigate } from 'react-router-dom';
-import type { ReactNode } from 'react';
 import { useAuth } from '../auth/useAuth';
 
 interface ProtectedRouteProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
@@ -11,8 +10,8 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background-50">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary-500 border-t-transparent" />
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent" />
       </div>
     );
   }

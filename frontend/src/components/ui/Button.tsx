@@ -20,8 +20,8 @@ export default function Button({
   
   const variants = {
     primary: 'bg-primary text-white hover:bg-primary-dark focus:ring-primary',
-    secondary: 'bg-slate-100 text-text-primary hover:bg-slate-200 focus:ring-slate-500',
-    outline: 'border-2 border-slate-300 text-text-primary hover:bg-slate-50 focus:ring-slate-500',
+    secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200 focus:ring-slate-500',
+    outline: 'border-2 border-slate-300 text-slate-900 hover:bg-slate-50 focus:ring-slate-500',
     danger: 'bg-error text-white hover:bg-red-600 focus:ring-error',
   };
 

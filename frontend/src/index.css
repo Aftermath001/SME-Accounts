@@ -1,19 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* Global base styles without @apply to avoid Tailwind v4 @apply limitations */
+/* Base styles */
 html {
   color-scheme: light;
 }
 
 body {
-  background-color: #f8fafc; /* slate-50 */
-  color: #334155; /* slate-700 / neutral-700 */
+  background-color: #F8FAFC; /* background */
+  color: #0F172A; /* text-primary */
+  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+/* Headings */
 h1,
 h2,
 h3,
@@ -21,26 +21,60 @@ h4,
 h5,
 h6 {
   font-weight: 700;
-  color: #0f172a; /* slate-900 */
+  color: #0F172A;
 }
 
+/* Text defaults */
 p,
 span,
 label {
-  color: #334155; /* neutral-700 */
+  color: #64748B; /* text-secondary */
 }
 
 .page-title {
   font-size: 1.875rem; /* text-3xl */
-  line-height: 2.25rem;
   font-weight: 700;
+  color: #0F172A;
+  line-height: 2.25rem;
   letter-spacing: -0.02em;
-  color: #0f172a;
 }
 
 .page-subtitle {
   margin-top: 0.25rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: #64748b; /* neutral-500 */
+  font-size: 0.875rem; /* text-sm */
+  color: #64748B;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Card */
+.card {
+  padding: 1.5rem;
+  background-color: #FFFFFF;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.read-the-docs {
+  color: #888;
 }
