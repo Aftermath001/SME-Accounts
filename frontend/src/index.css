@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global base styles without @apply to avoid Tailwind v4 @apply limitations */
+html {
+  color-scheme: light;
+}
+
+body {
+  background-color: #f8fafc; /* slate-50 */
+  color: #334155; /* slate-700 / neutral-700 */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  color: #0f172a; /* slate-900 */
+}
+
+p,
+span,
+label {
+  color: #334155; /* neutral-700 */
+}
+
+.page-title {
+  font-size: 1.875rem; /* text-3xl */
+  line-height: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.page-subtitle {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #64748b; /* neutral-500 */
+}

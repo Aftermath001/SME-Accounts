@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../auth/useAuth';
-import { useNavigate } from 'react-router-dom';
 import AuthLayout from '../layouts/AuthLayout';
-import Card from '../components/Card';
-import Button from '../components/Button';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
+import Input from '../components/ui/Input';
+import PasswordInput from '../components/PasswordInput';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,6 +17,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     setError('');
     setLoading(true);
 
@@ -30,39 +33,59 @@ export default function LoginPage() {
 
   return (
     <AuthLayout>
-      <Card className="p-8">
-        <h2 className="text-2xl font-bold mb-2">Welcome Back</h2>
-        <p className="text-slate-600 mb-6">Sign in to your account</p>
+      <Card className="max-w-md mx-auto p-6 bg-surface shadow-md">
+        <div className="space-y-2 text-center">
+          <h2 className="text-2xl font-bold text-text-primary">Welcome back</h2>
+          <p className="text-sm text-text-secondary">
+            Sign in to manage your SME finances and KRA compliance.
+          </p>
+        </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 text-sm">
+          <div className="mt-4 p-3 text-xs rounded-xl bg-error/20 text-error border border-error/30">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <Input
             type="email"
+            name="email"
+            label="Work email"
             placeholder="you@company.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
             required
-            className="w-full px-4 py-2 border rounded"
           />
 
-          <input
-            type="password"
-            placeholder="••••••••"
+          <PasswordInput
+            name="password"
+            label="Password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
             required
-            className="w-full px-4 py-2 border rounded"
           />
 
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? 'Signing in...' : 'Sign In'}
+          <div className="flex justify-end text-xs text-text-secondary">
+            <button type="button" className="text-primary font-medium hover:underline">
+              Forgot password?
+            </button>
+          </div>
+
+          <Button type="submit" loading={loading} className="w-full mt-2">
+            Sign in
           </Button>
         </form>
+
+        <p className="mt-6 text-center text-xs text-text-secondary">
+          New to SME Accounts?{' '}
+          <Link to="/signup" className="text-primary font-medium hover:underline">
+            Create an account
+          </Link>
+        </p>
       </Card>
     </AuthLayout>
   );

@@ -1,6 +1,6 @@
 import AppLayout from '../layouts/AppLayout';
-import Card from '../components/Card';
-import Button from '../components/Button';
+import Card from '../components/ui/Card';
+import Button from '../components/ui/Button';
 
 export default function ReportsPage() {
   return (
